@@ -78,7 +78,7 @@ export function ProductListPanel(props: { containerDimension: { width: number, h
                     setEditMode(true);
                     const result = await showPanel((close,containerDimension) => {
                         return <ActionList close={close} containerDimension={containerDimension} />
-                    },{animation:'bottom'});
+                    },{animation:'bottom',overlayHidden:true});
                     setEditMode(false);
                 }}/>
                 <SpaceFill/>

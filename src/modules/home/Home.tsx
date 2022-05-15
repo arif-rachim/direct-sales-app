@@ -51,8 +51,8 @@ export default function Home() {
     const {showPanel, SlidePanel} = useSlidePanel();
     const [selectedFooterItem, setSelectedFooterItem] = useState<FooterItem>(tabData[0]);
 
-    return <SlidePanel style={{width: '100%', height: '100%'}}>
-        <AppContext.Provider value={{showPanel}}>
+    return <AppContext.Provider value={{showPanel}}>
+            <SlidePanel style={{width: '100%', height: '100%'}}>
             <Vertical style={{width: '100%', height: '100%', backgroundColor: '#EFEFEF'}}>
                 {tabData.map(data => {
                     const isSelected = selectedFooterItem === data;
@@ -64,7 +64,8 @@ export default function Home() {
             <TabFooter selectedItem={selectedFooterItem} data={tabData} onSelectedItemChange={(item) => {
                 setSelectedFooterItem(item);
             }}/>
+            </SlidePanel>
         </AppContext.Provider>
-    </SlidePanel>
+
 }
 

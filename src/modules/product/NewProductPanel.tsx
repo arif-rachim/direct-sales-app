@@ -9,7 +9,7 @@ import {Footer} from "../component/Footer";
 const labelWidth = '7rem';
 
 export function Input(props: { label: string, field: string }) {
-    return <Horizontal style={{padding: '0.5rem 0rem', borderBottom: '1px solid #ccc'}} vAlign={'center'}>
+    return <Horizontal style={{padding: '0rem 0rem', borderBottom: '1px solid #ccc'}} vAlign={'center'}>
         <Horizontal style={{width: labelWidth, flexShrink: 0, marginBottom: '0.1rem'}} vAlign={'center'}
                     className={classes.label}>
             <Vertical style={{flexGrow: 1, flexShrink: 0}}>{props.label}</Vertical>

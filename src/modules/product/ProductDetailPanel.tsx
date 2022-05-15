@@ -23,7 +23,7 @@ export function ProductDetailPanel(props: { containerDimension: { width: number,
                 <TextButton label={'Edit'} onClick={async () => {
                     const action = await showPanel((close,containerDimension) => {
                         return <ActionList close={close} containerDimension={containerDimension} />
-                    },{animation:"bottom"})
+                    },{animation:"bottom",overlayHidden:true})
                 }}/>
             </Horizontal>
             <HeaderTitle title={'Product Information'}/>
