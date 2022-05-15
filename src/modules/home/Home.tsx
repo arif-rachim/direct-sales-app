@@ -1,76 +1,70 @@
 import Vertical from "../../layout/Vertical";
-import React from "react";
-import Horizontal from "../../layout/Horizontal";
-import classes from "./Home.module.css";
-import {useSlidePanel} from "../../layout/useSlidePanel";
-import {CatalogPanel} from "../catalog/CatalogPanel";
-import {DepoPanel} from "../depo/DepoPanel";
-import {OrderPanel} from "../order/OrderPanel";
-import {PaymentPanel} from "../payment/PaymentPanel";
-import {DeliveryPanel} from "../delivery/DeliveryPanel";
-import {UserPanel} from "../user/UserPanel";
+import React, {createContext, useState} from "react";
+import {ShowPanelCallback, useSlidePanel} from "../../layout/useSlidePanel";
+import {TabFooter, FooterItem} from "../component/TabFooter";
+import {
+    IoBagCheck,
+    IoBagCheckOutline,
+    IoBook,
+    IoBookOutline,
+    IoHome,
+    IoHomeOutline,
+    IoSettings,
+    IoSettingsOutline
+} from "react-icons/io5";
+import {HomePanel} from "./tab-panel/HomePanel";
+import {CheckOutPanel} from "./tab-panel/CheckOutPanel";
+import {OrderHistoryPanel} from "./tab-panel/OrderHistoryPanel";
+import {SettingsPanel} from "./tab-panel/SettingsPanel";
 
+const tabData: Array<FooterItem> = [
+    {
+        icon: IoHomeOutline,
+        iconSelected: IoHome,
+        panel: HomePanel,
+        label: 'Home'
+    },
+    {
+        icon: IoBagCheckOutline,
+        iconSelected: IoBagCheck,
+        panel: CheckOutPanel,
+        label: 'Checkout'
+    },
+    {
+        icon: IoBookOutline,
+        iconSelected: IoBook,
+        panel: OrderHistoryPanel,
+        label: 'Book'
+    },
+    {
+        icon: IoSettingsOutline,
+        iconSelected: IoSettings,
+        panel: SettingsPanel,
+        label: 'Settings'
+    }
+];
+
+
+export const AppContext = createContext<{ showPanel: ShowPanelCallback }>({showPanel: constructor => Promise.resolve()});
 export default function Home() {
-    const {showPanel, SlidePanel} = useSlidePanel({animation: "LEFT_RIGHT"});
-    return <SlidePanel style={{width: '100%', height: '100%'}}><Vertical
-        style={{width: '100%', height: '100%', backgroundColor: '#EFEFEF'}} vAlign={'center'}
-        hAlign={'center'}>
-        <Vertical style={{position: 'absolute', top: 0, left: '1rem'}}>
-            <h1>Direct Sales App</h1>
-        </Vertical>
-        <Vertical>
-            <Horizontal>
-                <Vertical className={classes.icon} onClick={() => {
-                    const result = showPanel((close, containerDimension) => {
-                        return <CatalogPanel closePanel={close} containerDimension={containerDimension}/>
-                    })
-                }}>
-                    Catalog
-                </Vertical>
-                <Vertical className={classes.icon} onClick={() => {
-                    const result = showPanel((close, containerDimension) => {
-                        return <DepoPanel closePanel={close} containerDimension={containerDimension}/>
-                    })
-                }}>
-                    Depo
-                </Vertical>
 
-                <Vertical className={classes.icon} onClick={() => {
-                    const result = showPanel((close, containerDimension) => {
-                        return <OrderPanel closePanel={close} containerDimension={containerDimension}/>
-                    })
-                }}>
-                    Order
-                </Vertical>
+    const {showPanel, SlidePanel} = useSlidePanel();
+    const [selectedFooterItem, setSelectedFooterItem] = useState<FooterItem>(tabData[0]);
 
-
-            </Horizontal>
-            <Horizontal>
-                <Vertical className={classes.icon} onClick={() => {
-                    const result = showPanel((close, containerDimension) => {
-                        return <PaymentPanel closePanel={close} containerDimension={containerDimension}/>
-                    })
-                }}>
-                    Payment
-                </Vertical>
-                <Vertical className={classes.icon} onClick={() => {
-                    const result = showPanel((close, containerDimension) => {
-                        return <DeliveryPanel closePanel={close} containerDimension={containerDimension}/>
-                    })
-                }}>
-                    Delivery
-                </Vertical>
-                <Vertical className={classes.icon} onClick={() => {
-                    const result = showPanel((close, containerDimension) => {
-                        return <UserPanel closePanel={close} containerDimension={containerDimension}/>
-                    })
-                }}>
-                    User
-                </Vertical>
-
-            </Horizontal>
-        </Vertical>
-    </Vertical>
+    return <SlidePanel style={{width: '100%', height: '100%'}}>
+        <AppContext.Provider value={{showPanel}}>
+            <Vertical style={{width: '100%', height: '100%', backgroundColor: '#EFEFEF'}}>
+                {tabData.map(data => {
+                    const isSelected = selectedFooterItem === data;
+                    return <Vertical key={data.label} style={{height: '100%', display: isSelected ? 'flex' : 'none'}}>
+                        <data.panel/>
+                    </Vertical>
+                })}
+            </Vertical>
+            <TabFooter selectedItem={selectedFooterItem} data={tabData} onSelectedItemChange={(item) => {
+                setSelectedFooterItem(item);
+            }}/>
+        </AppContext.Provider>
     </SlidePanel>
-
 }
+
