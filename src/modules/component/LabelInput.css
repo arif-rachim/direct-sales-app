@@ -1,0 +1,22 @@
+.errorText-enter{
+    height: 0;
+    overflow: hidden;
+    opacity: 0;
+}
+.errorText-enter-active{
+    height : 1.2rem;
+    opacity: 1;
+    transition: height 300ms ease-in-out;
+    overflow: hidden;
+}
+.errorText-enter-done{
+    height : 1.2rem;
+}
+.errorText-exit{
+    height : 1.1rem;
+}
+.errorText-exit-active{
+    height : 0;
+    transition: height 300ms ease-in-out;
+    overflow: hidden;
+}

@@ -1,6 +1,6 @@
 import Vertical from "../../layout/Vertical";
 import React from "react";
-import {Input} from "./NewProductPanel";
+
 import {HeaderPanel} from "../component/HeaderPanel";
 import {HeaderTitle} from "../component/HeaderTitle";
 import {NavigateBackIcon} from "../component/NavigateBackIcon";
@@ -10,6 +10,7 @@ import Horizontal from "../../layout/Horizontal";
 import {TextButton} from "../component/TextButton";
 import {useSlidePanel} from "../../layout/useSlidePanel";
 import {Footer} from "../component/Footer";
+import {LabelInput} from "../component/LabelInput";
 
 export function ProductDetailPanel(props: { containerDimension: { width: number, height: number }, closePanel: (result: any) => void }) {
     const {showPanel, SlidePanel} = useSlidePanel();
@@ -29,12 +30,12 @@ export function ProductDetailPanel(props: { containerDimension: { width: number,
             <HeaderTitle title={'Product Information'}/>
         </HeaderPanel>
         <Vertical style={{padding: '1rem'}}>
-            <Input label={'Name'} field={'name'}/>
-            <Input label={'Description'} field={'description'}/>
-            <Input label={'Group'} field={'group'}/>
-            <Input label={'Price'} field={'price'}/>
-            <Input label={'UoM'} field={'unitOfMeasurement'}/>
-            <Input label={'Status'} field={'status'}/>
+            <LabelInput label={'Name'} field={'name'}/>
+            <LabelInput label={'Description'} field={'description'}/>
+            <LabelInput label={'Group'} field={'group'}/>
+            <LabelInput label={'Price'} field={'price'}/>
+            <LabelInput label={'UoM'} field={'unitOfMeasurement'}/>
+            <LabelInput label={'Status'} field={'status'}/>
             <Vertical style={{
                 border: '1px solid #ccc',
                 backgroundColor: '#efefef',

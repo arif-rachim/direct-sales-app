@@ -17,6 +17,7 @@ import {TextButton} from "../component/TextButton";
 import {useObserver, useObserverValue} from "react-hook-useobserver/lib";
 import {Observer} from "react-hook-useobserver/lib/useObserver";
 import {Footer} from "../component/Footer";
+import {Text} from "../../layout/Text";
 
 
 function CellComponent(props: CellComponentStyledProps) {
@@ -33,8 +34,8 @@ function CellComponent(props: CellComponentStyledProps) {
             marginLeft: '1rem'
         }}/>
         <Vertical style={{flexGrow: 1, marginLeft: '1rem', height: '100%', paddingTop: '0.7rem'}}>
-            <Vertical style={{fontSize: '1.1rem', fontWeight: 'bold'}}>Aircraft Tail 2601</Vertical>
-            <Vertical style={{fontSize: '1rem'}}>Double wing bladed aircraft, Specializing in combat Ready mission</Vertical>
+            <Text style={{fontSize: '1.1rem', fontWeight: 'bold'}} text={'Aircraft Tail 2601'}/>
+            <Text style={{fontSize: '0.9rem'}} text={'Double wing bladed aircraft, Specializing in combat Ready mission'}/>
         </Vertical>
         <Vertical style={{marginRight: '0.5rem', color: '#888',display:editMode?'none':'flex'}}>
             <IoChevronForwardOutline/>

@@ -11,6 +11,7 @@ import {UserPanel} from "../../user/UserPanel";
 import {AppContext} from "../Home";
 import {HeaderTitle} from "../../component/HeaderTitle";
 import {HeaderPanel} from "../../component/HeaderPanel";
+import {Text} from "../../../layout/Text";
 
 export function HomePanel() {
     const {showPanel} = useContext(AppContext);
@@ -28,14 +29,14 @@ export function HomePanel() {
                             return <ProductListPanel closePanel={close} containerDimension={containerDimension}/>
                         }, {animation: "right"})
                     }}>
-                        Product
+                        <Text text={'Product'} />
                     </Vertical>
                     <Vertical className={classes.icon} onClick={async () => {
                         const result = await showPanel((close, containerDimension) => {
                             return <DepoPanel closePanel={close} containerDimension={containerDimension}/>
                         }, {animation: "right"})
                     }}>
-                        Depo
+                        <Text text={'Depo'} />
                     </Vertical>
 
 
@@ -46,14 +47,14 @@ export function HomePanel() {
                             return <OrderPanel closePanel={close} containerDimension={containerDimension}/>
                         }, {animation: "right"})
                     }}>
-                        Order
+                        <Text text={'Order'} />
                     </Vertical>
                     <Vertical className={classes.icon} onClick={async () => {
                         const result = await showPanel((close, containerDimension) => {
                             return <PaymentPanel closePanel={close} containerDimension={containerDimension}/>
                         }, {animation: "right"})
                     }}>
-                        Payment
+                        <Text text={'Payment'} />
                     </Vertical>
 
                 </Horizontal>
@@ -63,14 +64,14 @@ export function HomePanel() {
                             return <DeliveryPanel closePanel={close} containerDimension={containerDimension}/>
                         }, {animation: "right"})
                     }}>
-                        Delivery
+                        <Text text={'Delivery'} />
                     </Vertical>
                     <Vertical className={classes.icon} onClick={async () => {
                         const result = await showPanel((close, containerDimension) => {
                             return <UserPanel closePanel={close} containerDimension={containerDimension}/>
                         }, {animation: "right"})
                     }}>
-                        User
+                        <Text text={'User'} />
                     </Vertical>
                 </Horizontal>
             </Vertical>

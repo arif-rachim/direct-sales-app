@@ -1,6 +1,7 @@
 import Vertical from "../../layout/Vertical";
 import React from "react";
 import {Footer} from "./Footer";
+import {Text} from "../../layout/Text";
 
 export interface FooterItem {
     icon: Function;
@@ -24,7 +25,7 @@ export function TabFooter(props: { selectedItem?: FooterItem, data: Array<Footer
                 props.onSelectedItemChange(data);
             }}>
                 {isSelected ? <data.iconSelected/> : <data.icon/>}
-                <Vertical style={{fontSize: '0.8rem'}}>{data.label}</Vertical>
+                <Text style={{fontSize: '0.8rem'}} text={data.label}/>
             </Vertical>
         })}
     </Footer>

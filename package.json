@@ -9,15 +9,19 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
+    "@types/react-transition-group": "^4.4.4",
+    "@types/cleave.js": "^1.4.6",
     "@types/jest": "^27.4.1",
     "@types/node": "^17.0.21",
     "@types/react": "^17.0.39",
     "@types/react-dom": "^17.0.13",
+    "cleave.js": "^1.6.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-hook-useobserver": "^1.0.0-alpha.15",
     "react-icons": "^4.3.1",
     "react-scripts": "^4.0.3",
+    "react-transition-group": "^4.4.2",
     "typescript": "^4.6.2"
   },
   "browserslist": {

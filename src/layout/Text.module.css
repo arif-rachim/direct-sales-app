@@ -1,0 +1,6 @@
+@import "SFProText/stylesheet.css";
+.text{
+    font-family: SFProText;
+    margin : 0;
+    padding: 0;
+}
