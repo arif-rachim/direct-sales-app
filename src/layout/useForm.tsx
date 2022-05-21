@@ -210,3 +210,15 @@ export function Input(props: InputProps) {
         setValue(e.target.value);
     }} style={props.style}/>
 }
+
+export function useFieldErrors(field:string):Array<string>{
+    const formContext = useContext(FormContext);
+    const err: any = useObserverValue(formContext.$errors, (errors: any) => {
+        const err: Map<string, Array<string>> = errors;
+        if (err) {
+            return err.get(field) || [];
+        }
+        return [];
+    });
+    return err;
+}

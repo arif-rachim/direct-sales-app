@@ -29,17 +29,19 @@ function valueRequiredValidator(props: ValidatorTypeProps) {
 
 export function NewProductPanel(props: { close: (result: any) => void, containerDimension: { width: number; height: number } }) {
     const {Form, validateForm} = useForm({});
+
     return <Vertical style={{backgroundColor: '#fff'}}>
         <Vertical style={{padding: '1rem', borderTop: '1px solid #ccc'}}>
             <Vertical style={{fontSize: '1.5rem', marginTop: '0.2rem', marginBottom: '0.5rem', fontWeight: 'bold'}}
                       hAlign={'center'}><Text text={'New Product'}/></Vertical>
             <Form>
-                <LabelInput label={'Name'} field={'name'} validator={valueRequiredValidator}/>
-                <LabelInput label={'Description'} field={'description'} validator={valueRequiredValidator}/>
-                <LabelInput label={'Group'} field={'group'} validator={valueRequiredValidator}/>
-                <LabelInput label={'Price'} field={'price'} validator={valueRequiredValidator}/>
-                <LabelInput label={'UoM'} field={'unitOfMeasurement'} validator={valueRequiredValidator}/>
-                <LabelInput label={'Status'} field={'status'} validator={valueRequiredValidator}/>
+                {/*<LabelInput label={'Name'} field={'name'} inputMode={"numeric"} validator={valueRequiredValidator}/>*/}
+                {/*<LabelInput label={'Description'} inputMode={'text'} field={'description'} validator={valueRequiredValidator}/>*/}
+                {/*<LabelInput label={'Group'} inputMode={"text"} field={'group'} validator={valueRequiredValidator}/>*/}
+                {/*<LabelInput label={'Price'} inputMode={'numeric'} field={'price'} validator={valueRequiredValidator}/>*/}
+                {/*<LabelInput label={'UoM'} inputMode={'text'} field={'unitOfMeasurement'} validator={valueRequiredValidator}/>*/}
+                {/*<LabelInput label={'Status'} inputMode={'text'} field={'status'} validator={valueRequiredValidator}/>*/}
+
                 <Vertical style={{
                     border: '1px solid #ccc',
                     backgroundColor: '#efefef',
@@ -54,7 +56,11 @@ export function NewProductPanel(props: { close: (result: any) => void, container
         <Footer style={{padding: '0.5rem 1rem'}}>
             <TextButton label={'Cancel'} onClick={() => props.close(false)}/>
             <SpaceFill/>
-            <TextButton label={'Save'} onClick={() => validateForm()} promoted={true}/>
+            <TextButton label={'Save'} onClick={() => {
+                if(validateForm()){
+
+                }
+            }} promoted={true}/>
         </Footer>
     </Vertical>
 }

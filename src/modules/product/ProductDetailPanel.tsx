@@ -30,12 +30,12 @@ export function ProductDetailPanel(props: { containerDimension: { width: number,
             <HeaderTitle title={'Product Information'}/>
         </HeaderPanel>
         <Vertical style={{padding: '1rem'}}>
-            <LabelInput label={'Name'} field={'name'}/>
-            <LabelInput label={'Description'} field={'description'}/>
-            <LabelInput label={'Group'} field={'group'}/>
-            <LabelInput label={'Price'} field={'price'}/>
-            <LabelInput label={'UoM'} field={'unitOfMeasurement'}/>
-            <LabelInput label={'Status'} field={'status'}/>
+            {/*<LabelInput label={'Name'} field={'name'}/>*/}
+            {/*<LabelInput label={'Description'} field={'description'}/>*/}
+            {/*<LabelInput label={'Group'} field={'group'}/>*/}
+            {/*<LabelInput label={'Price'} field={'price'}/>*/}
+            {/*<LabelInput label={'UoM'} field={'unitOfMeasurement'}/>*/}
+            {/*<LabelInput label={'Status'} field={'status'}/>*/}
             <Vertical style={{
                 border: '1px solid #ccc',
                 backgroundColor: '#efefef',

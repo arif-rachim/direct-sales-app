@@ -1,7 +1,7 @@
 import Vertical from "../../layout/Vertical";
 import React, {createContext, useState} from "react";
 import {ShowPanelCallback, useSlidePanel} from "../../layout/useSlidePanel";
-import {TabFooter, FooterItem} from "../component/TabFooter";
+import {FooterItem, TabFooter} from "../component/TabFooter";
 import {
     IoBagCheck,
     IoBagCheckOutline,
@@ -45,18 +45,23 @@ const tabData: Array<FooterItem> = [
 ];
 
 
-export const AppContext = createContext<{ showPanel: ShowPanelCallback }>({showPanel: constructor => Promise.resolve()});
+export const AppContext = createContext<{ showPanel: ShowPanelCallback }>({
+    showPanel: (constructor, config) => {
+        return new Promise(resolve => {
+            throw new Error('Show panel not yet ready');
+        })
+    }
+});
 export default function Home() {
-
     const {showPanel, SlidePanel} = useSlidePanel();
     const [selectedFooterItem, setSelectedFooterItem] = useState<FooterItem>(tabData[0]);
-
     return <AppContext.Provider value={{showPanel}}>
-            <SlidePanel style={{width: '100%', height: '100%'}}>
+        <SlidePanel style={{width: '100%', height: '100%'}}>
             <Vertical style={{width: '100%', height: '100%', backgroundColor: '#EFEFEF'}}>
                 {tabData.map(data => {
                     const isSelected = selectedFooterItem === data;
-                    return <Vertical key={data.label} style={{height: '100%', display: isSelected ? 'flex' : 'none'}}>
+                    return <Vertical key={data.label}
+                                     style={{height: '100%', display: isSelected ? 'flex' : 'none'}}>
                         <data.panel/>
                     </Vertical>
                 })}
@@ -64,8 +69,9 @@ export default function Home() {
             <TabFooter selectedItem={selectedFooterItem} data={tabData} onSelectedItemChange={(item) => {
                 setSelectedFooterItem(item);
             }}/>
-            </SlidePanel>
-        </AppContext.Provider>
+
+        </SlidePanel>
+    </AppContext.Provider>
 
 }
 

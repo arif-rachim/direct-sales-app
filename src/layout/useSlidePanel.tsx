@@ -2,6 +2,7 @@ import React, {useEffect, useMemo, useRef, useState} from "react";
 import {ObserverValue, useObserver} from "react-hook-useobserver";
 import {Observer} from "react-hook-useobserver/lib/useObserver";
 import Vertical from "./Vertical";
+import {useObserverValue} from "react-hook-useobserver/lib";
 
 
 interface PanelItem {
@@ -76,20 +77,20 @@ export interface ConfigType {
     animation?: AnimationType,
     overlayHidden?: boolean
 }
-function OverlayPanel(props:{hasPanel: boolean, $containerDimension:Observer<{width:number,height:number}>}) {
+
+function OverlayPanel(props: { hasPanel: boolean, $containerDimension: Observer<{ width: number, height: number }> }) {
     const domRef = useRef(emptyDiv);
     const hasPanel = props.hasPanel;
 
     useEffect(() => {
-
-        if(hasPanel){
+        if (hasPanel) {
             domRef.current.style.zIndex = '0';
-        }else{
+        } else {
             setTimeout(() => {
                 domRef.current.style.zIndex = '-1';
-            },animationDuration)
+            }, animationDuration)
         }
-    },[hasPanel]);
+    }, [hasPanel]);
     return <Vertical ref={domRef} style={{
         backgroundColor: `rgba(0,0,0,${props.hasPanel ? 0.2 : 0})`, ...props.$containerDimension.current,
         top: 0,
@@ -113,15 +114,15 @@ function OverlayPanel(props:{hasPanel: boolean, $containerDimension:Observer<{wi
  * }
  */
 export function useSlidePanel(): { showPanel: ShowPanelCallback; SlidePanel: React.FC<React.HTMLAttributes<HTMLDivElement>> } {
-
-
-    const [$panels, setPanels] = useObserver<Array<PanelItem>>([]);
-    const [$containerDimension, setContainerDimension] = useObserver({width: 0, height: 0});
+    const panelsObserver = useObserver<Array<PanelItem>>([]);
+    const containerDimensionObserver = useObserver({width: 0, height: 0});
     const containerRef = useRef(emptyDiv);
     return useMemo(() => {
+        const [$panels, setPanels] = panelsObserver;
+        const [$containerDimension, setContainerDimension] = containerDimensionObserver;
+
         function showPanel(constructor: ShowPanelType, config: ConfigType = {animation: "top", overlayHidden: false}) {
             return new Promise((resolve) => {
-
                 let panelOpenListeners: Array<(isOpen: boolean) => void> = [];
 
                 function setOpen(isOpen: boolean) {
@@ -149,7 +150,6 @@ export function useSlidePanel(): { showPanel: ShowPanelCallback; SlidePanel: Rea
                 }, {width, height});
 
                 setPanels((old: Array<PanelItem>) => {
-
                     const panelObject: PanelItem = {
                         panel: Panel,
                         onOpenClose,
@@ -168,23 +168,22 @@ export function useSlidePanel(): { showPanel: ShowPanelCallback; SlidePanel: Rea
                 const {width, height} = containerRef.current.getBoundingClientRect();
                 setContainerDimension({width, height});
             }, []);
+
             return <Vertical ref={containerRef} style={{
-                backgroundColor: 'rgba(0,0,0,0.1)',
                 position: 'relative',
                 overflow: 'hidden',
                 boxSizing: 'border-box',
                 ...style
             }} {...properties}>
                 {props.children}
-
                 <ObserverValue observers={[$panels, $containerDimension]} render={() => {
                     const hasPanel = $panels.current.length > 0;
-                    const lastPanel = $panels.current[$panels.current.length-1];
+                    const lastPanel = $panels.current[$panels.current.length - 1];
                     const overlayHidden = lastPanel?.overlayHidden;
+
                     return <>
-                        {!overlayHidden &&
-                        <OverlayPanel hasPanel={hasPanel} $containerDimension={$containerDimension} />
-                        }
+                        <OverlayPanel hasPanel={overlayHidden === true ? false : hasPanel}
+                                      $containerDimension={$containerDimension}/>
                         {$panels.current.map((panel, index) => {
                             return <SlidePanelChild key={index} index={index} $containerDimension={$containerDimension}
                                                     panel={panel}/>
@@ -195,5 +194,9 @@ export function useSlidePanel(): { showPanel: ShowPanelCallback; SlidePanel: Rea
         }
 
         return {showPanel, SlidePanel};
-    }, []);
+    }, [panelsObserver, containerDimensionObserver]);
+}
+
+function noOp(something: any) {
+    // do nothing to satisfy linting
 }
