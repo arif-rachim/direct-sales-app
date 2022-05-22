@@ -74,7 +74,7 @@ export function useForm<T>(initialState: Initialization<T>) {
             </FormContext.Provider>
         }
 
-        return {Form, $errors, $touched, $modified, $state, validateForm};
+        return {Form, $errors, $touched, $modified, $state, validateForm,setState,setTouched,setModified,setErrors};
     }, []);
 }
 
@@ -95,16 +95,16 @@ function toggleState(flag: boolean, setState: Dispatch<SetObserverAction<any>>, 
     });
 }
 
-export interface ValidatorTypeProps {
-    field: string,
-    formState: any,
-    formStateFieldValue: any,
-    formStateFieldMappedValue: string,
-    formTouched: Array<string>,
-    formModified: Array<string>
+export interface ValidatorProps {
+    field: string;
+    state: any;
+    value: any;
+    mappedValue: string;
+    touched: Array<string>;
+    modified: Array<string>;
 }
 
-export type ValidatorType = (props: ValidatorTypeProps) => string | Array<string>
+export type ValidatorType = (props: ValidatorProps) => string | Array<string>
 const defaultValidator: ValidatorType = props => [];
 
 export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -151,11 +151,11 @@ export function Input(props: InputProps) {
             const stringValue = valueMapper(rawValue);
             const errors = validator({
                 field: props.field,
-                formModified: context.$modified.current,
-                formState: context.$state.current,
-                formStateFieldMappedValue: stringValue,
-                formStateFieldValue: rawValue,
-                formTouched: context.$touched.current
+                modified: context.$modified.current,
+                state: context.$state.current,
+                mappedValue: stringValue,
+                value: rawValue,
+                touched: context.$touched.current
             });
             setErrors(errors);
         }
@@ -200,11 +200,11 @@ export function Input(props: InputProps) {
         setTouched(true);
         const errors = propsRef.current.validator({
             field: props.field,
-            formModified: context.$modified.current,
-            formState: context.$state.current,
-            formStateFieldMappedValue,
-            formStateFieldValue,
-            formTouched: context.$touched.current
+            modified: context.$modified.current,
+            state: context.$state.current,
+            mappedValue:formStateFieldMappedValue,
+            value:formStateFieldValue,
+            touched: context.$touched.current
         });
         setErrors(errors);
         setValue(e.target.value);

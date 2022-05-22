@@ -17,7 +17,6 @@ export interface LabelInputProps {
     field: string,
     config: InputConfig,
     showPanel?: ShowPanelCallback;
-    readOnly? : boolean;
 }
 
 export interface LookupProps {
@@ -33,7 +32,8 @@ export interface InputConfig extends CleaveOptions {
     search?: boolean;
     url?: boolean;
     password?: boolean;
-    lookup?: LookupProps
+    lookup?: LookupProps;
+    readOnly? : boolean;
 }
 
 
@@ -124,7 +124,7 @@ export function LabelInput(props: LabelInputProps) {
     if(config.lookup){
         valueMapper = config.lookup.valueMapper;
     }
-    const readOnly = isLookupInput ? true : props.readOnly;
+    const readOnly = isLookupInput ? true : config.readOnly;
     // end of code for lookup input
 
 

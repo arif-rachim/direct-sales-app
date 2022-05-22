@@ -13,16 +13,22 @@ import {HeaderPanel} from "../component/HeaderPanel";
 import {Text} from "../../layout/Text";
 import {ListPanel} from "../page/ListPanel";
 import {ListCellComponentProps} from "../../grid/List";
+import {ValidatorProps} from "../../layout/useForm";
 
 function LabelCellComponent(props: ListCellComponentProps) {
     return <Vertical vAlign={'center'} style={{marginLeft: '1rem'}}>
         <Text text={props.dataItem.label}/>
     </Vertical>
 }
-
+function valueRequiredValidator(val:ValidatorProps){
+    const value = val?.value;
+    if(value === undefined || value === null || value === ''){
+        return 'Field value required';
+    }
+    return [];
+}
 export function HomePanel() {
     const {showPanel} = useContext(AppContext);
-
     return <Vertical style={{width: '100%', height: '100%'}}>
         <HeaderPanel>
             <HeaderTitle title={'Home'}/>
@@ -34,14 +40,14 @@ export function HomePanel() {
                         const result = await showPanel((close, containerDimension) => {
                             return <ListPanel closePanel={close} containerDimension={containerDimension}
                                               title={'Product'}
-                                              listData={[{data: 'one'}, {data: 'two'}, {data: 'two'}, {data: 'four'}]}
                                               listRenderer={(props) => {
                                                   return <Vertical>
                                                       {JSON.stringify(props.dataItem)}
                                                   </Vertical>
                                               }}
+                                              entityName={'Product'}
                                               formInputs={[
-                                                  {field: 'code', label: 'Code', config: {}},
+                                                  {field: 'code', label: 'Code', config: {validator:valueRequiredValidator}},
                                                   {field: 'name', label: 'Name', config: {}},
                                                   {field: 'description', label: 'Description', config: {}},
                                                   {field: 'group', label: 'Group', config: {}},
@@ -56,7 +62,7 @@ export function HomePanel() {
                                                               selectionMode: 'single',
                                                               cellComponent: LabelCellComponent,
                                                               valueMapper:item => {
-                                                                  return item?.label;
+                                                                  return item?.label
                                                               }
                                                           }
                                                       }

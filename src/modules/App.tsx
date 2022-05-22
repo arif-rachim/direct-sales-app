@@ -55,8 +55,9 @@ export const AppContext = createContext<{ showPanel: ShowPanelCallback }>({
 export default function App() {
     const {showPanel, SlidePanel} = useSlidePanel();
     const [selectedFooterItem, setSelectedFooterItem] = useState<FooterItem>(tabData[0]);
-    return <AppContext.Provider value={{showPanel}}>
-        <SlidePanel style={{width: '100%', height: '100%'}}>
+    // return <AppContext.Provider value={{showPanel}}>
+        return <SlidePanel style={{width: '100%', height: '100%'}}>
+            <AppContext.Provider value={{showPanel}}>
             <Vertical style={{width: '100%', height: '100%', backgroundColor: '#EFEFEF'}}>
                 {tabData.map(data => {
                     const isSelected = selectedFooterItem === data;
@@ -69,9 +70,9 @@ export default function App() {
             <TabFooter selectedItem={selectedFooterItem} data={tabData} onSelectedItemChange={(item) => {
                 setSelectedFooterItem(item);
             }}/>
-
+            </AppContext.Provider>
         </SlidePanel>
-    </AppContext.Provider>
+    {/*</AppContext.Provider>*/}
 
 }
 
