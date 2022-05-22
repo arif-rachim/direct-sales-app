@@ -18,14 +18,17 @@ import {Footer} from "../component/Footer";
 import {List, ListCellComponentProps} from "../../grid/List";
 import {useFetch} from "./useFetch";
 import {Checkbox} from "../component/Checkbox";
+import {Visible} from "../../layout/Visible";
 
 function CellComponent(props: ListCellComponentProps) {
     const {dataItem, dataSource, rowIndex, cellStyle} = props;
-    const {$editMode} = useContext(ListContext);
+
+    const {$editMode,cellComponent:Cell} = useContext(ListContext);
     const editMode = useObserverValue($editMode);
     return <Horizontal style={{height: '100%', ...cellStyle}} vAlign={'center'}>
-        <>
-            {editMode && <Checkbox selected={false}/>}
+            <Visible visible={editMode}>
+                <Checkbox selected={false}/>
+            </Visible>
             <Vertical style={{
                 borderRadius: '10rem',
                 border: '1px solid #ccc',
@@ -34,22 +37,21 @@ function CellComponent(props: ListCellComponentProps) {
                 flexShrink: 0,
                 marginLeft: '1rem'
             }}/>
-            <Vertical style={{flexGrow: 1, marginLeft: '1rem', height: '100%', paddingTop: '0.7rem'}}>
-                Detail Panel
-            </Vertical>
+            <Cell cellStyle={cellStyle} dataSource={dataSource} rowIndex={rowIndex} dataItem={dataItem}/>
             <Vertical style={{marginRight: '0.5rem', color: '#888', display: editMode ? 'none' : 'flex'}}>
                 <IoChevronForwardOutline/>
             </Vertical>
-        </>
+
     </Horizontal>
 }
 
-const ListContext = createContext<{ $editMode: Observer<boolean> }>({
+const ListContext = createContext<{ $editMode: Observer<boolean>,cellComponent:React.FC<ListCellComponentProps> }>({
     $editMode: {
         current: true,
         addListener: (listener: any) => () => {
         }
-    }
+    },
+    cellComponent : () => <></>
 })
 
 interface RenderListProps {
@@ -62,7 +64,7 @@ interface RenderListProps {
 interface ListPanelProps {
     containerDimension: { width: number, height: number },
     closePanel: (result: any) => void,
-    listRenderer: (item: RenderListProps) => JSX.Element,
+    cellComponent: React.FC<ListCellComponentProps>,
     title: string,
     formInputs: Array<FormInputProps>,
     entityName: string
@@ -116,7 +118,7 @@ export function ListPanel(props: React.PropsWithoutRef<ListPanelProps>) {
     const [$editMode, setEditMode] = useObserver(false);
     const fetch = useFetch(props.entityName);
     const [$listData, setListData] = useObserver([]);
-
+    const cellComponent = props.cellComponent;
     const refresh = useCallback(async function refresh(){
         const result:any = await fetch.findAll();
         setListData(result);
@@ -135,7 +137,7 @@ export function ListPanel(props: React.PropsWithoutRef<ListPanelProps>) {
                     refresh={refresh}
         />
         <Vertical style={{height: '100%', overflow: 'auto'}}>
-            <ListContext.Provider value={{$editMode}}>
+            <ListContext.Provider value={{$editMode,cellComponent}}>
                 <ObserverValue observers={$listData} render={() => {
                     return <List data={$listData.current} defaultRowHeight={80} cellComponent={CellComponent}
                                  onFocusedDataItemChange={async (newItem) => {

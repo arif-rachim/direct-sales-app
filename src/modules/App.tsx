@@ -55,7 +55,7 @@ export const AppContext = createContext<{ showPanel: ShowPanelCallback }>({
 export default function App() {
     const {showPanel, SlidePanel} = useSlidePanel();
     const [selectedFooterItem, setSelectedFooterItem] = useState<FooterItem>(tabData[0]);
-    // return <AppContext.Provider value={{showPanel}}>
+
         return <SlidePanel style={{width: '100%', height: '100%'}}>
             <AppContext.Provider value={{showPanel}}>
             <Vertical style={{width: '100%', height: '100%', backgroundColor: '#EFEFEF'}}>
@@ -72,7 +72,7 @@ export default function App() {
             }}/>
             </AppContext.Provider>
         </SlidePanel>
-    {/*</AppContext.Provider>*/}
+
 
 }
 

@@ -20,6 +20,14 @@ function LabelCellComponent(props: ListCellComponentProps) {
         <Text text={props.dataItem.label}/>
     </Vertical>
 }
+
+function ListCellComponent(props:ListCellComponentProps){
+
+    return <Vertical vAlign={'center'} style={{marginLeft: '1rem',flexGrow:1}}>
+        <Text text={props.dataItem.code} style={{fontSize:'1.2rem'}}/>
+        <Text text={props.dataItem.name}/>
+    </Vertical>
+}
 function valueRequiredValidator(val:ValidatorProps){
     const value = val?.value;
     if(value === undefined || value === null || value === ''){
@@ -40,16 +48,12 @@ export function HomePanel() {
                         const result = await showPanel((close, containerDimension) => {
                             return <ListPanel closePanel={close} containerDimension={containerDimension}
                                               title={'Product'}
-                                              listRenderer={(props) => {
-                                                  return <Vertical>
-                                                      {JSON.stringify(props.dataItem)}
-                                                  </Vertical>
-                                              }}
+                                              cellComponent={ListCellComponent}
                                               entityName={'Product'}
                                               formInputs={[
                                                   {field: 'code', label: 'Code', config: {validator:valueRequiredValidator}},
-                                                  {field: 'name', label: 'Name', config: {}},
-                                                  {field: 'description', label: 'Description', config: {}},
+                                                  {field: 'name', label: 'Name', config: {validator:valueRequiredValidator}},
+                                                  {field: 'description', label: 'Description', config: {validator:valueRequiredValidator}},
                                                   {field: 'group', label: 'Group', config: {}},
                                                   {field: 'price', label: 'Price', config: {numeral: true}},
                                                   {field: 'unitOfMeasurement', label: 'UoM', config: {}},

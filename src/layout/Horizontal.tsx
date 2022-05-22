@@ -22,6 +22,7 @@ export default React.forwardRef(function Horizontal(props: HorizontalProps, ref:
         right: 'flex-end',
         center: 'center'
     }[hAlign];
+    
     const alignItems = vAlign === undefined ? vAlign : {
         top: 'flex-start',
         bottom: 'flex-end',
