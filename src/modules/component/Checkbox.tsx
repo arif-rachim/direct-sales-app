@@ -7,7 +7,7 @@ interface CheckboxProps{
 }
 
 export function Checkbox(props:React.PropsWithoutRef<CheckboxProps>){
-    return <Vertical style={{fontSize:'2rem'}} >
+    return <Vertical style={{fontSize:'2rem',color:'#333'}} >
         {props.selected && <IoCheckboxOutline/>}
         {!props.selected && <IoSquareOutline/>}
     </Vertical>

@@ -9,7 +9,6 @@ import {Observer} from "react-hook-useobserver/lib/useObserver";
 import Horizontal from "../../layout/Horizontal";
 import {Checkbox} from "./Checkbox";
 import {useObserverListener} from "react-hook-useobserver";
-import {config} from "react-transition-group";
 
 interface LookupPanelInterface {
     data: Array<any>,
@@ -28,7 +27,7 @@ interface LookupContextProps {
     cellComponent: React.FC<ListCellComponentProps>
 }
 
-function EmptyComponent(props: ListCellComponentProps) {
+function EmptyComponent() {
     return <></>
 }
 
@@ -84,7 +83,7 @@ function CellComponent(props: ListCellComponentProps) {
             }
             return [...oldVal, props.dataItem];
         })
-    }}>
+    }} vAlign={'center'} style={{height:'100%'}}>
         <CheckboxComponent $selectedItems={$selectedItems} rowItem={props.dataItem}/>
         <Comp dataItem={props.dataItem} rowIndex={props.rowIndex} cellStyle={props.cellStyle}
               dataSource={props.dataSource}/>

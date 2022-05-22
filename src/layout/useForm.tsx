@@ -10,8 +10,8 @@ import {
 } from "react-hook-useobserver/lib";
 import {Observer} from "react-hook-useobserver/lib/useObserver";
 import Cleave from "cleave.js/react";
-import {CleaveOptions} from "cleave.js/options";
 import {ChangeEventHandler, InitHandler} from "cleave.js/react/props";
+import {InputConfig} from "../modules/component/LabelInput";
 
 export const FormContext = createContext<{
     setState: Dispatch<SetObserverAction<any>>;
@@ -105,12 +105,12 @@ export interface ValidatorProps {
 }
 
 export type ValidatorType = (props: ValidatorProps) => string | Array<string>
-const defaultValidator: ValidatorType = props => [];
+const defaultValidator: ValidatorType = () => [];
 
 export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
     field: string;
     onInit?: InitHandler | undefined;
-    options: CleaveOptions;
+    options: InputConfig;
     htmlRef?: ((i: any) => void) | undefined;
     onChange?: ChangeEventHandler<HTMLInputElement> | undefined;
     valueMapper?: (value: any) => string;
@@ -129,7 +129,7 @@ export function Input(props: InputProps) {
     const propsRef = useRef({valueMapper, valueConverter, validator});
     propsRef.current = {valueMapper, valueConverter, validator};
 
-    const rawValue = useObserverValue(context.$state, arg => {
+    const rawValue = useObserverValue(context.$state, () => {
         const state = context.$state.current || {};
         return state[props.field];
     })
@@ -193,7 +193,7 @@ export function Input(props: InputProps) {
         });
     }
 
-    return <Cleave {...properties} options={props.options} value={stringValue} onChange={(e) => {
+    function onChangeListener(e:any) {
         const formStateFieldValue = e.target.value;
         const formStateFieldMappedValue = propsRef.current.valueMapper(formStateFieldValue);
         setModified(true);
@@ -202,23 +202,28 @@ export function Input(props: InputProps) {
             field: props.field,
             modified: context.$modified.current,
             state: context.$state.current,
-            mappedValue:formStateFieldMappedValue,
-            value:formStateFieldValue,
+            mappedValue: formStateFieldMappedValue,
+            value: formStateFieldValue,
             touched: context.$touched.current
         });
         setErrors(errors);
         setValue(e.target.value);
-    }} style={props.style}/>
+    }
+
+    if(props.options.text){
+
+        return <input {...properties} value={stringValue||''} onChange={onChangeListener} style={props.style}/>
+    }
+    return <Cleave {...properties} options={props.options} value={stringValue} onChange={onChangeListener} style={props.style}/>
 }
 
-export function useFieldErrors(field:string):Array<string>{
+export function useFieldErrors(field:string){
     const formContext = useContext(FormContext);
-    const err: any = useObserverValue(formContext.$errors, (errors: any) => {
+    return useObserverValue(formContext.$errors, (errors: any) => {
         const err: Map<string, Array<string>> = errors;
         if (err) {
             return err.get(field) || [];
         }
         return [];
     });
-    return err;
 }

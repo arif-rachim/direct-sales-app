@@ -46,8 +46,8 @@ const tabData: Array<FooterItem> = [
 
 
 export const AppContext = createContext<{ showPanel: ShowPanelCallback }>({
-    showPanel: (constructor, config) => {
-        return new Promise(resolve => {
+    showPanel: () => {
+        return new Promise(() => {
             throw new Error('Show panel not yet ready');
         })
     }
@@ -56,8 +56,9 @@ export default function App() {
     const {showPanel, SlidePanel} = useSlidePanel();
     const [selectedFooterItem, setSelectedFooterItem] = useState<FooterItem>(tabData[0]);
 
-        return <SlidePanel style={{width: '100%', height: '100%'}}>
-            <AppContext.Provider value={{showPanel}}>
+        return<AppContext.Provider value={{showPanel}}>
+            <SlidePanel style={{width: '100%', height: '100%'}}>
+
             <Vertical style={{width: '100%', height: '100%', backgroundColor: '#EFEFEF'}}>
                 {tabData.map(data => {
                     const isSelected = selectedFooterItem === data;
@@ -70,8 +71,9 @@ export default function App() {
             <TabFooter selectedItem={selectedFooterItem} data={tabData} onSelectedItemChange={(item) => {
                 setSelectedFooterItem(item);
             }}/>
-            </AppContext.Provider>
+
         </SlidePanel>
+</AppContext.Provider>
 
 
 }

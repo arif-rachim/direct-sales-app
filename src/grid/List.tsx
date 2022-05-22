@@ -40,6 +40,7 @@ export function List(props: ListProps) {
 function CellComponent(props: CellComponentStyledProps) {
     const {Component} = props.column.payload;
     const Comp: React.FC<ListCellComponentProps> = Component;
+
     return <Vertical style={{flexGrow: 1, height: '100%',...props.cellStyle}}>
         <Comp dataSource={props.dataSource} rowIndex={props.rowIndex} dataItem={props.dataItem}
               cellStyle={props.cellStyle}

@@ -13,7 +13,7 @@ import React, {
     useRef,
     useState
 } from "react";
-import {useObserver,useObserverListener} from "react-hook-useobserver";
+import {useObserver, useObserverListener} from "react-hook-useobserver";
 import {Observer} from "react-hook-useobserver/lib/useObserver";
 import Vertical from "../layout/Vertical";
 

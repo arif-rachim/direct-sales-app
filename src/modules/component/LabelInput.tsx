@@ -34,6 +34,7 @@ export interface InputConfig extends CleaveOptions {
     password?: boolean;
     lookup?: LookupProps;
     readOnly? : boolean;
+    text?:boolean;
 }
 
 
@@ -103,7 +104,7 @@ async function showLookup(props: LabelInputProps, config: InputConfig, value:any
 }
 
 export function LabelInput(props: LabelInputProps) {
-    const errors: Array<string> = useFieldErrors(props.field);
+    const errors: Array<string> = useFieldErrors(props.field) as Array<string>;
     const {$state, setState} = useContext(FormContext);
     const value = useObserverValue($state, valueSelector($state, props));
     const [$lookupData, setLookupData] = useObserver<Array<any>>([]);

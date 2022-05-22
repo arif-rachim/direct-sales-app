@@ -1,4 +1,4 @@
-import React, {CSSProperties, useRef, useEffect, useState} from "react";
+import React, {CSSProperties} from "react";
 import classes from "./Text.module.css";
 
 interface TextProps{

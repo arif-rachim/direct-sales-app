@@ -35,6 +35,7 @@ function DetailHeader(properties: {
     $state:Observer<any>,
     entityName:string
 }) {
+    const fetch = useFetch(properties.entityName);
     return <HeaderPanel>
         <Horizontal vAlign={'center'}>
             <NavigateBackIcon onClick={() => {
@@ -44,8 +45,11 @@ function DetailHeader(properties: {
             <TextButton label={'Edit'} onClick={async () => {
                 const action = await properties.showPanel((close) => {
                     return <ActionList close={close}
-                                       validateForm={properties.validateForm} $state={properties.$state} entityName={properties.entityName}/>
-                }, {animation: "bottom", overlayHidden: true})
+                                       validateForm={properties.validateForm} $state={properties.$state} />
+                }, {animation: "bottom", overlayHidden: true});
+                if(action === 'save'){
+                    await fetch.update(properties.$state.current);
+                }
             }}/>
         </Horizontal>
         <HeaderTitle title={`${properties.title} Info`}/>
@@ -97,9 +101,12 @@ export function DetailPanel(props: DetailPanelProps) {
 
             </Vertical>
             {isNew &&
-                <ActionList close={() => {
+                <ActionList close={async (result) => {
+                    if(result === 'save'){
+                        await fetch.create($state.current);
+                    }
                     props.closePanel(true);
-                }} validateForm={validateForm} entityName={props.entityName} $state={$state}/>
+                }} validateForm={validateForm} $state={$state}/>
             }
         </Vertical>
     </SlidePanel>
@@ -108,17 +115,15 @@ export function DetailPanel(props: DetailPanelProps) {
 function ActionList(props: {
     close: (result: any) => void,
     validateForm: () => boolean,
-    entityName:string,
     $state:Observer<any>
 }) {
-    const fetch = useFetch(props.entityName);
+
     return <Footer style={{padding: '0.5rem 1rem'}}>
-        <TextButton label={'Cancel'}/>
+        <TextButton label={'Cancel'} onClick={() => props.close('cancel')}/>
         <SpaceFill/>
         <TextButton label={'Save'} promoted={true} onClick={async () => {
             if (props.validateForm()) {
-                await fetch.create(props.$state.current)
-                props.close(true)
+                props.close('save')
             }
         }}/>
     </Footer>

@@ -1,7 +1,19 @@
 import {useMemo} from "react";
 
-async function uid(val: number) {
-    return Math.round(Math.random() * 10000000).toString();
+function generateUUID() { // Public Domain/MIT
+    let d = new Date().getTime();//Timestamp
+    let d2 = ((typeof performance !== 'undefined') && performance.now && (performance.now()*1000)) || 0;//Time in microseconds since page-load or 0 if unsupported
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        let r = Math.random() * 16;//random number between 0 and 16
+        if(d > 0){//Use timestamp until depleted
+            r = (d + r)%16 | 0;
+            d = Math.floor(d/16);
+        } else {//Use microseconds since page-load if supported
+            r = (d2 + r)%16 | 0;
+            d2 = Math.floor(d2/16);
+        }
+        return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+    });
 }
 
 const entities: any = {};
@@ -23,7 +35,7 @@ export function useFetch(entityName: string) {
         }
 
         async function create(value: any) {
-            const id = await uid(18);
+            const id = generateUUID();
             const collection = entities[entityName];
             const newCollection = [{id, createdOn: new Date(), lastModifiedOn: undefined, ...value}, ...collection]
             entities[entityName] = newCollection;
@@ -31,11 +43,12 @@ export function useFetch(entityName: string) {
         }
 
         async function read(id: string) {
-            return entities[entityName].find((i: Entity) => i.id === id);
+            const entity = entities[entityName].find((i: Entity) => i.id === id);
+            return ({...entity});
         }
 
         async function update(value: any) {
-            const persisted = read(value.id);
+            const persisted = entities[entityName].find((i: Entity) => i.id === value.id);
             const collection = entities[entityName];
             const indexToRemove = collection.indexOf(persisted);
             collection.splice(indexToRemove, 1, {...persisted, ...value, lastModifiedOn: new Date()});
@@ -45,11 +58,15 @@ export function useFetch(entityName: string) {
         }
 
         async function remove(id: string) {
-            const persisted = read(id);
             const collection = entities[entityName];
-            const indexToRemove = collection.indexOf(persisted);
-            collection.splice(indexToRemove, 1);
-            const newCollection = [...collection]
+            const newCollection = collection.filter((i:any) => i.id !== id);
+            entities[entityName] = newCollection;
+            localStorage.setItem(entityName, JSON.stringify(newCollection));
+        }
+
+        async function removeAll(ids:Array<string>){
+            const collection = entities[entityName];
+            const newCollection = collection.filter((i:any) => !ids.includes(i.id));
             entities[entityName] = newCollection;
             localStorage.setItem(entityName, JSON.stringify(newCollection));
         }
@@ -63,7 +80,8 @@ export function useFetch(entityName: string) {
             read,
             update,
             remove,
-            findAll
+            findAll,
+            removeAll
         }
     }, []);
 }

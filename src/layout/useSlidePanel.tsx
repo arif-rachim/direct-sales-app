@@ -2,7 +2,6 @@ import React, {useEffect, useMemo, useRef, useState} from "react";
 import {ObserverValue, useObserver} from "react-hook-useobserver";
 import {Observer} from "react-hook-useobserver/lib/useObserver";
 import Vertical from "./Vertical";
-import {useObserverValue} from "react-hook-useobserver/lib";
 
 
 interface PanelItem {
@@ -195,8 +194,4 @@ export function useSlidePanel(): { showPanel: ShowPanelCallback; SlidePanel: Rea
 
         return {showPanel, SlidePanel};
     }, [panelsObserver, containerDimensionObserver]);
-}
-
-function noOp(something: any) {
-    // do nothing to satisfy linting
 }

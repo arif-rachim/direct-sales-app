@@ -45,16 +45,16 @@ export function HomePanel() {
             <Vertical>
                 <Horizontal>
                     <Vertical className={classes.icon} onClick={async () => {
-                        const result = await showPanel((close, containerDimension) => {
+                        await showPanel((close, containerDimension) => {
                             return <ListPanel closePanel={close} containerDimension={containerDimension}
                                               title={'Product'}
                                               cellComponent={ListCellComponent}
                                               entityName={'Product'}
                                               formInputs={[
-                                                  {field: 'code', label: 'Code', config: {validator:valueRequiredValidator}},
-                                                  {field: 'name', label: 'Name', config: {validator:valueRequiredValidator}},
-                                                  {field: 'description', label: 'Description', config: {validator:valueRequiredValidator}},
-                                                  {field: 'group', label: 'Group', config: {}},
+                                                  {field: 'code', label: 'Code', config: {text:true,validator:valueRequiredValidator}},
+                                                  {field: 'name', label: 'Name', config: {text:true,validator:valueRequiredValidator}},
+                                                  {field: 'description', label: 'Description', config: {text:true,validator:valueRequiredValidator}},
+                                                  {field: 'group', label: 'Group', config: {text:true}},
                                                   {field: 'price', label: 'Price', config: {numeral: true}},
                                                   {field: 'unitOfMeasurement', label: 'UoM', config: {}},
                                                   {
@@ -78,7 +78,7 @@ export function HomePanel() {
                         <Text text={'Product'}/>
                     </Vertical>
                     <Vertical className={classes.icon} onClick={async () => {
-                        const result = await showPanel((close, containerDimension) => {
+                        await showPanel((close, containerDimension) => {
                             return <DepoPanel closePanel={close} containerDimension={containerDimension}/>
                         }, {animation: "right"})
                     }}>
@@ -89,14 +89,14 @@ export function HomePanel() {
                 </Horizontal>
                 <Horizontal>
                     <Vertical className={classes.icon} onClick={async () => {
-                        const result = await showPanel((close, containerDimension) => {
+                        await showPanel((close, containerDimension) => {
                             return <OrderPanel closePanel={close} containerDimension={containerDimension}/>
                         }, {animation: "right"})
                     }}>
                         <Text text={'Order'}/>
                     </Vertical>
                     <Vertical className={classes.icon} onClick={async () => {
-                        const result = await showPanel((close, containerDimension) => {
+                        await showPanel((close, containerDimension) => {
                             return <PaymentPanel closePanel={close} containerDimension={containerDimension}/>
                         }, {animation: "right"})
                     }}>
@@ -106,14 +106,14 @@ export function HomePanel() {
                 </Horizontal>
                 <Horizontal>
                     <Vertical className={classes.icon} onClick={async () => {
-                        const result = await showPanel((close, containerDimension) => {
+                        await showPanel((close, containerDimension) => {
                             return <DeliveryPanel closePanel={close} containerDimension={containerDimension}/>
                         }, {animation: "right"})
                     }}>
                         <Text text={'Delivery'}/>
                     </Vertical>
                     <Vertical className={classes.icon} onClick={async () => {
-                        const result = await showPanel((close, containerDimension) => {
+                        await showPanel((close, containerDimension) => {
                             return <UserPanel closePanel={close} containerDimension={containerDimension}/>
                         }, {animation: "right"})
                     }}>
