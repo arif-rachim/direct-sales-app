@@ -40,7 +40,7 @@ const LookupContext = createContext<LookupContextProps>({
 });
 
 export function LookupPanel(props: React.PropsWithChildren<LookupPanelInterface>) {
-    const [$selectedItems, setSelectedItems] = useObserver<Array<any>>([]);
+    const [$selectedItems, setSelectedItems] = useObserver<Array<any>>(props.selectedItems || []);
     const selectionMode = props.selectionMode;
     return <Vertical style={{borderTop: '1px solid rgba(0,0,0,0.1)'}}>
         <LookupContext.Provider value={{

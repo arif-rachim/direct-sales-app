@@ -8,6 +8,7 @@ import {useObserver, useObserverValue} from "react-hook-useobserver/lib";
 import {ListCellComponentProps} from "../../grid/List";
 import {ShowPanelCallback} from "../../layout/useSlidePanel";
 import {LookupPanel} from "./LookupPanel";
+import {Observer} from "react-hook-useobserver/lib/useObserver";
 
 export const InputContext = createContext<{ labelWidth: number | string }>({labelWidth: '7rem'});
 
@@ -16,6 +17,7 @@ export interface LabelInputProps {
     field: string,
     config: InputConfig,
     showPanel?: ShowPanelCallback;
+    readOnly? : boolean;
 }
 
 export interface LookupProps {
@@ -35,19 +37,17 @@ export interface InputConfig extends CleaveOptions {
 }
 
 
-export function LabelInput(props: LabelInputProps) {
-
-    const errors: Array<string> = useFieldErrors(props.field);
-    const {$state, setState} = useContext(FormContext);
-    const value = useObserverValue($state, () => {
+function valueSelector($state: Observer<any>, props: LabelInputProps) {
+    return () => {
         const state = $state.current;
         if (props.field in state) {
             return state[props.field];
         }
         return undefined;
-    });
-    const [$lookupData, setLookupData] = useObserver<Array<any>>([]);
-    const config = props.config;
+    }
+}
+
+function determineInputMode(config: InputConfig) {
     let inputMode: any = 'text';
     if (config?.numeral || config?.numericOnly || config?.numeralPositiveOnly) {
         inputMode = 'numeric';
@@ -67,53 +67,80 @@ export function LabelInput(props: LabelInputProps) {
     if (config?.password) {
         inputMode = 'text';
     }
-    const fetchData = config?.lookup?.fetchData;
-    useEffect(() => {
+    return inputMode;
+}
+
+function onFetchDataEffect(fetchData: (() => Promise<Array<any>>) | undefined, setLookupData: (value: (((prevState: Array<any>) => Array<any>) | Array<any>)) => void) {
+    return () => {
         if (fetchData) {
             (async () => {
                 const lookupData = await fetchData();
                 setLookupData(lookupData);
             })();
         }
-    }, [fetchData]);
+    };
+}
 
+async function showLookup(props: LabelInputProps, config: InputConfig, value:any, $lookupData: Observer<Array<any>>, setState: (value: any) => void) {
+    if(config.lookup === undefined){
+        return;
+    }
+    if (props.showPanel === undefined) {
+        throw new Error('LabelInput properties require showPanel since it was using lookup config');
+    }
+    const {selectionMode, cellComponent} = config.lookup;
+    const result = await props.showPanel((close, containerDimension) => {
+        const selectedItems = value !== undefined && selectionMode === 'single' ? [value] : value;
+        return <LookupPanel data={$lookupData.current} close={close} containerDimension={containerDimension}
+                            keySelector={(item) => item} selectedItems={selectedItems} selectionMode={selectionMode}
+                            cellComponent={cellComponent}/>
+    }, {animation: 'bottom'});
+    if (result?.status !== 'cancel') {
+        setState((state: any) => {
+            return {...state, [props.field]: result}
+        });
+    }
+}
+
+export function LabelInput(props: LabelInputProps) {
+    const errors: Array<string> = useFieldErrors(props.field);
+    const {$state, setState} = useContext(FormContext);
+    const value = useObserverValue($state, valueSelector($state, props));
+    const [$lookupData, setLookupData] = useObserver<Array<any>>([]);
+    const config = props.config;
+    let inputMode = determineInputMode(config);
+    const onChange = useCallback((event:any) => setState((state: any) => ({...state, [props.field]: event.target.value})), []);
+    let valueMapper = defaultValueMapper;
+
+    // Following part of code is designed for lookup input
+    const fetchData = config?.lookup?.fetchData;
+    useEffect(onFetchDataEffect(fetchData, setLookupData), [fetchData]);
+    const isLookupInput = config.lookup !== undefined;
     async function onFocusListener() {
-        if (config.lookup) {
-            if (props.showPanel === undefined) {
-                throw new Error('LabelInput properties require showPanel since it was using lookup config');
-            }
-            const {selectionMode, cellComponent} = config.lookup;
-            const result = await props.showPanel((close, containerDimension) => {
-                return <LookupPanel data={$lookupData.current} close={close} containerDimension={containerDimension}
-                                    keySelector={(item) => item} selectedItems={[]} selectionMode={selectionMode}
-                                    cellComponent={cellComponent}/>
-            }, {animation: 'bottom'});
-            if (result?.status !== 'cancel') {
-                setState((state: any) => {
-                    return {...state, [props.field]: result}
-                });
-            }
+        if (isLookupInput) {
+            await showLookup(props, config, value, $lookupData, setState);
         }
     }
-    const onChange = useCallback(event => {
-        setState((state: any) => {
-            return {...state, [props.field]: event.target.value}
-        });
-    }, []);
-    let valueMapper = (val:string) => val;
     if(config.lookup){
-        valueMapper = config.lookup.valueMapper
+        valueMapper = config.lookup.valueMapper;
     }
+    const readOnly = isLookupInput ? true : props.readOnly;
+    // end of code for lookup input
+
 
     return <LabelWrapper errors={errors} label={props.label}>
         <Input className={classes.input} field={props.field} options={props.config}
                inputMode={inputMode} validator={props?.config?.validator || emptyValidator} onFocus={onFocusListener}
                value={value} onChange={onChange}
-               valueMapper={valueMapper}
+               valueMapper={valueMapper} readOnly={readOnly}
         />
     </LabelWrapper>
 }
 
 function emptyValidator() {
     return [];
+}
+
+function defaultValueMapper(val:any){
+    return val;
 }

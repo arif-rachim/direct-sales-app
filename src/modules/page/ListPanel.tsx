@@ -21,6 +21,7 @@ function CellComponent(props: ListCellComponentProps) {
     const {$editMode} = useContext(GridContext);
     const editMode = useObserverValue($editMode);
     return <Horizontal style={{height: '100%', ...cellStyle}} vAlign={'center'}>
+        <>
         {editMode && <input type={'checkbox'}/>}
         <Vertical style={{
             borderRadius: '10rem',
@@ -36,6 +37,7 @@ function CellComponent(props: ListCellComponentProps) {
         <Vertical style={{marginRight: '0.5rem', color: '#888', display: editMode ? 'none' : 'flex'}}>
             <IoChevronForwardOutline/>
         </Vertical>
+        </>
     </Horizontal>
 }
 
@@ -78,7 +80,9 @@ export function ListPanel(props: React.PropsWithoutRef<ListPanelProps>) {
                 }}/>
                 <SpaceFill/>
                 <CreateNewIcon onClick={async () => {
-
+                    await showPanel((close, containerDimension) => {
+                        return <DetailPanel containerDimension={containerDimension} closePanel={close} formInputs={props.formInputs} />
+                    });
                 }}/>
             </Horizontal>
             <HeaderTitle title={props.title}/>

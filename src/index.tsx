@@ -1,8 +1,10 @@
 import 'react-app-polyfill/ie11';
 import 'react-app-polyfill/stable';
 import React from "react";
-import ReactDOM from "react-dom";
 import "./index.css";
-import Home from "./modules/home/Home";
+import App from "./modules/App";
 
-ReactDOM.render(<Home/>, document.getElementById('root'));
+import { createRoot } from 'react-dom/client';
+const container = document.getElementById('root');
+const root = createRoot(container!); // createRoot(container!) if you use TypeScript
+root.render(<App />);

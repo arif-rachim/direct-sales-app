@@ -24,6 +24,7 @@ function CellComponent(props: CellComponentStyledProps) {
     const {$editMode} = useContext(GridContext);
     const editMode = useObserverValue($editMode);
     return <Horizontal style={{height: '100%', ...props.cellStyle}} vAlign={'center'}>
+        <>
         {editMode && <input type={'checkbox'}/>}
         <Vertical style={{
             borderRadius: '10rem',
@@ -40,6 +41,7 @@ function CellComponent(props: CellComponentStyledProps) {
         <Vertical style={{marginRight: '0.5rem', color: '#888',display:editMode?'none':'flex'}}>
             <IoChevronForwardOutline/>
         </Vertical>
+        </>
     </Horizontal>
 }
 

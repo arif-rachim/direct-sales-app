@@ -1,7 +1,7 @@
-import Vertical from "../../layout/Vertical";
+import Vertical from "../layout/Vertical";
 import React, {createContext, useState} from "react";
-import {ShowPanelCallback, useSlidePanel} from "../../layout/useSlidePanel";
-import {FooterItem, TabFooter} from "../component/TabFooter";
+import {ShowPanelCallback, useSlidePanel} from "../layout/useSlidePanel";
+import {FooterItem, TabFooter} from "./component/TabFooter";
 import {
     IoBagCheck,
     IoBagCheckOutline,
@@ -12,10 +12,10 @@ import {
     IoSettings,
     IoSettingsOutline
 } from "react-icons/io5";
-import {HomePanel} from "./tab-panel/HomePanel";
-import {CheckOutPanel} from "./tab-panel/CheckOutPanel";
-import {OrderHistoryPanel} from "./tab-panel/OrderHistoryPanel";
-import {SettingsPanel} from "./tab-panel/SettingsPanel";
+import {HomePanel} from "./home/HomePanel"
+import {CheckOutPanel} from "./home/CheckOutPanel";
+import {OrderHistoryPanel} from "./home/OrderHistoryPanel";
+import {SettingsPanel} from "./home/SettingsPanel";
 
 const tabData: Array<FooterItem> = [
     {
@@ -52,7 +52,7 @@ export const AppContext = createContext<{ showPanel: ShowPanelCallback }>({
         })
     }
 });
-export default function Home() {
+export default function App() {
     const {showPanel, SlidePanel} = useSlidePanel();
     const [selectedFooterItem, setSelectedFooterItem] = useState<FooterItem>(tabData[0]);
     return <AppContext.Provider value={{showPanel}}>

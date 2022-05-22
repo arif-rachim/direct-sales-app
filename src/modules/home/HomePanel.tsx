@@ -1,18 +1,18 @@
-import Vertical from "../../../layout/Vertical";
+import Vertical from "../../layout/Vertical";
 import React, {useContext} from "react";
-import Horizontal from "../../../layout/Horizontal";
-import classes from "../Home.module.css";
-import {DepoPanel} from "../../depo/DepoPanel";
-import {OrderPanel} from "../../order/OrderPanel";
-import {PaymentPanel} from "../../payment/PaymentPanel";
-import {DeliveryPanel} from "../../delivery/DeliveryPanel";
-import {UserPanel} from "../../user/UserPanel";
-import {AppContext} from "../Home";
-import {HeaderTitle} from "../../component/HeaderTitle";
-import {HeaderPanel} from "../../component/HeaderPanel";
-import {Text} from "../../../layout/Text";
-import {ListPanel} from "../../page/ListPanel";
-import {ListCellComponentProps} from "../../../grid/List";
+import Horizontal from "../../layout/Horizontal";
+import classes from "./Home.module.css";
+import {DepoPanel} from "../depo/DepoPanel";
+import {OrderPanel} from "../order/OrderPanel";
+import {PaymentPanel} from "../payment/PaymentPanel";
+import {DeliveryPanel} from "../delivery/DeliveryPanel";
+import {UserPanel} from "../user/UserPanel";
+import {AppContext} from "../App";
+import {HeaderTitle} from "../component/HeaderTitle";
+import {HeaderPanel} from "../component/HeaderPanel";
+import {Text} from "../../layout/Text";
+import {ListPanel} from "../page/ListPanel";
+import {ListCellComponentProps} from "../../grid/List";
 
 function LabelCellComponent(props: ListCellComponentProps) {
     return <Vertical vAlign={'center'} style={{marginLeft: '1rem'}}>

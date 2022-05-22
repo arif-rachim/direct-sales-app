@@ -12,8 +12,6 @@ import {useSlidePanel} from "../../layout/useSlidePanel";
 import {Footer} from "../component/Footer";
 import {LabelInput, LabelInputProps} from "../component/LabelInput";
 import {useForm} from "../../layout/useForm";
-import {Text} from "../../layout/Text";
-import {useObserverListener} from "react-hook-useobserver";
 
 export interface FormInputProps extends LabelInputProps {
 }
@@ -28,8 +26,10 @@ export function DetailPanel(props: DetailPanelProps) {
     const {Form, validateForm} = useForm({});
     const {showPanel, SlidePanel} = useSlidePanel();
 
-    return <SlidePanel><Vertical style={{backgroundColor: '#fff', ...props.containerDimension}}>
+    return <SlidePanel>
+        <Vertical style={{backgroundColor: '#fff', ...props.containerDimension}}>
         <HeaderPanel>
+
             <Horizontal vAlign={'center'}>
                 <NavigateBackIcon onClick={() => {
                     props.closePanel(true);
@@ -50,7 +50,7 @@ export function DetailPanel(props: DetailPanelProps) {
                                        key={formInputProps.field}
                                        config={formInputProps.config}
                                        showPanel={showPanel}
-                                       />
+                    />
                 })}
                 <Vertical style={{
                     border: '1px solid #ccc',
